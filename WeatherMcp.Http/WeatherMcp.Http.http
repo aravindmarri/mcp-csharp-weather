@@ -1,0 +1,28 @@
+@host = http://localhost:5113
+
+### 1. Initialize, the way older clients connect (protocol 2025-11-25)
+# In the default stateless mode the response has no Mcp-Session-Id header.
+POST {{host}}/
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"http-file","version":"1.0"}}}
+
+### 2. Call the tool directly; no session header is needed in stateless mode
+POST {{host}}/
+Content-Type: application/json
+Accept: application/json, text/event-stream
+MCP-Protocol-Version: 2025-11-25
+
+{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"get_forecast","arguments":{"city":"Paris"}}}
+
+### 3. Call the tool with the 2026-07-28 revision (no initialize handshake)
+# The protocol version, client capabilities and client info travel in _meta on every request.
+POST {{host}}/
+Content-Type: application/json
+Accept: application/json, text/event-stream
+MCP-Protocol-Version: 2026-07-28
+Mcp-Method: tools/call
+Mcp-Name: get_forecast
+
+{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_forecast","arguments":{"city":"Tokyo"},"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{},"io.modelcontextprotocol/clientInfo":{"name":"http-file","version":"1.0"}}}}

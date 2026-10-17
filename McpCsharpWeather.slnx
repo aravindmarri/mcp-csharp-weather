@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="WeatherMcp.Http/WeatherMcp.Http.csproj" />
+  <Project Path="WeatherMcp/WeatherMcp.csproj" />
+</Solution>
