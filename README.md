@@ -35,6 +35,26 @@ Use `@latest`. Without it, `npx` can reuse an older, deprecated v1 Inspector fro
 
 The first connection takes a few seconds because `dotnet run` builds the project before the server can answer.
 
+### What a successful run looks like
+
+These screenshots are from a real run with Inspector 2.11.0.
+
+The server connects over stdio. The Inspector negotiated protocol revision 2025-11-25, and the log shows the handshake:
+
+![MCP Inspector showing the dotnet server connected over STDIO, with initialize, notifications/initialized and tools/list in the protocol log](docs/images/01-inspector-connected.png)
+
+The tool form is generated from the method signature and its `[Description]` attributes:
+
+![MCP Inspector Tools view with get_forecast selected and the city field filled in with London](docs/images/02-inspector-tool-form.png)
+
+Executing the tool returns the mock forecast:
+
+![MCP Inspector showing the result "London: 18C, light rain expected this afternoon" next to the tools/call entry in the protocol log](docs/images/03-inspector-result.png)
+
+Expanding the `tools/call` entry shows the raw JSON-RPC request and response:
+
+![Expanded tools/call message showing the JSON-RPC request parameters and response](docs/images/04-inspector-tools-call-json.png)
+
 ### Use it from VS Code
 
 `.vscode/mcp.json` at the repository root registers the stdio server. The path is relative to the repository root, so open the root folder in VS Code.
